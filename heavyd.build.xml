@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="HeavyD" default="project:help">
+
+    <!--
+        Property bundle loading
+        Ensure that the full property date is written out in the file system.
+        This is to make it easier to add extra properties etc to the project set.
+        All the .yml files in the /properties/dist, env and local folder are combined and aggregated
+        into a basic set.
+    -->
+    <!-- Include custom property loading tasks -->
+    <includepath classpath="${project.basedir}/.heavyd/vendor/surangapg/phing-property-bundle/src" />
+
+    <taskdef classname="PropertyDirWriteTask" name="property-dir-write" />
+    <taskdef classname="PropertyDirLoadTask" name="property-dir" />
+
+    <if>
+        <not>
+            <isset property="current.basePath" />
+        </not>
+        <then>
+            <echo message="No custom basepath set, using project.basedir" />
+            <property name="current.basePath" value="${project.basedir}" />
+        </then>
+    </if>
+
+    <property name="output.FULL_PROPERTIES_EXIST" value="false" />
+    <exec command="if [ -f '${project.basedir}/properties/bin.yml' ]; then echo 'true'; else echo 'false'; fi;" outputProperty="output.FULL_PROPERTIES_EXIST" />
+    <if>
+        <equals arg1="${output.FULL_PROPERTIES_EXIST}" arg2="false" />
+        <then>
+            <echo message="full property files don't appear to be generated yet, generating on the fly via property-dir-write" />
+            <property-dir-write originDir="${project.basedir}/properties"
+                                subLevels="dist,site,stage,env"
+                                outputDir="${project.basedir}/properties"
+                                order="project,dir,bin,behat"
+                                override="true"
+                                outputFull="false"
+            />
+        </then>
+    </if>
+
+    <!-- Loads the full property files from the base dir -->
+    <property-dir propertyDir="${project.basedir}/properties"/>
+
+    <target name="project:property-write-full">
+        <if>
+            <not>
+                <isset property="current.basePath" />
+            </not>
+            <then>
+                <echo message="No custom basepath set, using project.basedir" />
+                <property name="current.basePath" value="${project.basedir}" />
+            </then>
+        </if>
+        <property-dir-write originDir="${project.basedir}/properties"
+                            subLevels="dist,site,env,stage"
+                            outputDir="${project.basedir}/properties"
+                            order="project,dir,bin,behat"
+                            override="true"
+                            outputFull="true"
+        />
+    </target>
+</project>
