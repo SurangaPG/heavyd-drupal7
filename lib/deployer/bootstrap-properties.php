@@ -43,7 +43,7 @@ set('local_workspace', $heavydProperties['project']['basePath']);
 foreach ($heavydProperties['server'] as $serverKey => $serverData) {
   host($serverData['host'])
     ->stage( $serverData['stage'])
-    ->configFile('~/.ssh/config')
+ //   ->configFile('~/.ssh/config')
     ->forwardAgent(true)
     ->multiplexing(true)
     ->addSshOption('UserKnownHostsFile', '/dev/null')
@@ -51,7 +51,7 @@ foreach ($heavydProperties['server'] as $serverKey => $serverData) {
     ->user($serverData['user'])
     ->roles('app')
     ->set('deploy_path', $serverData['root'])
-    ->set('env', $serverData['env'])
+    ->set('environment', $serverData['env'])
     ->set('site', $serverData['site'])
     ->set('stage', $serverData['stage'])
     ->set('root', $serverData['root'])
@@ -62,8 +62,8 @@ foreach ($heavydProperties['server'] as $serverKey => $serverData) {
     ])
     ->set('writable_dirs', [
       $relativeWebDir . '/sites/' . $serverData['site'] . '/files',
-      'assets/files/' . $serverData['site'] . 'temp',
-      'assets/files/' . $serverData['site'] . 'private',
+      'assets/files/' . $serverData['site'] . '/temp',
+      'assets/files/' . $serverData['site'] . '/private',
     ])
     // The .env file contains DB credentials etc specific for the environment.
     ->set('shared_files', [

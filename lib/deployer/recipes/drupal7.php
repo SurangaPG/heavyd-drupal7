@@ -14,17 +14,8 @@ namespace Deployer;
 desc('Get the env settings file needed for the hosting provider.');
 task('drupal7:env-settings', function () {
 
-  $settingFileCustom = get('env_settings_file_custom');
-  $settingsFileBaseLocation = get('env_settings_file_location_base');
-
-  if(empty($settingFileCustom)) {
-    $hostingProvider = get('hosting_provider');
-    writeLn('No custom settings file selected, defaulting to basic file for: ' . $hostingProvider);
-    $settingsFile = $settingsFileBaseLocation . '/settings.' . $hostingProvider . '.php';
-  }
-  else {
-    $settingsFile = $settingFileCustom;
-  }
+  $environment = get('environment');
+  $settingsFile = getcwd() . '/etc/env/' . $environment . '/settings.env.php';
 
   // Check or the file actually exists
   if(!file_exists($settingsFile)) {
@@ -32,8 +23,8 @@ task('drupal7:env-settings', function () {
   }
 
   // If all is well, copy over the file
-  runLocally('mkdir -p ' . getcwd() . '/{{web_dir}}/sites/{{drupal_site_dir}}');
-  runLocally('cp ' . $settingsFile . ' ' . getcwd() . '/{{web_dir}}/sites/{{drupal_site_dir}}/settings.env.php');
+  runLocally('mkdir -p ' . getcwd() . '/web/sites/{{site}}');
+  runLocally('cp ' . $settingsFile . ' ' . getcwd() . '/web/sites/{{site}}/settings.env.php');
 });
 
 /**
@@ -52,8 +43,8 @@ task('drupal7:local-settings', function () {
   }
 
   // If all is well, copy over the file
-  runLocally('mkdir -p ' . getcwd() . '/{{web_dir}}/sites/{{drupal_site_dir}}');
-  runLocally('cp ' . $settingFile . ' ' . getcwd() . '/{{web_dir}}/sites/{{drupal_site_dir}}/settings.local.php');
+  runLocally('mkdir -p ' . getcwd() . '/web/sites/{{site}}');
+  runLocally('cp ' . $settingFile . ' ' . getcwd() . '/web/sites/{{site}}/settings.local.php');
 });
 
 
@@ -64,8 +55,8 @@ desc('Symlink the default folder to a more specific site folder if needed.');
 task('drupal7:symlink', function () {
 
   // @TODO ensure this doesn't fail when the symlink already exists in the repo
-  $siteDir = get('drupal_site_dir');
-  $webDir = get('web_dir');
+  $siteDir = get('site');
+  $webDir = 'web';
 
   $defaultDir = getcwd() . '/' . $webDir . '/sites/default';
 
@@ -77,6 +68,6 @@ task('drupal7:symlink', function () {
 
   if(!file_exists(getcwd() . '/' . $webDir . '/sites/default')) {
     writeLn('Symlinking "sites/default" folder to "sites/' . $siteDir . '"');
-    runLocally('cd {{web_dir}}/sites && ln -s {{drupal_site_dir}} default');
+    runLocally('cd web/sites && ln -s {{site}} default');
   }
 });

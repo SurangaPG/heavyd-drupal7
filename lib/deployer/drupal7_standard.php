@@ -12,7 +12,7 @@ require 'recipe/common.php';
 
 # Dependencies from the extra deployer recipes
 require __DIR__ . '/../../../../deployer/recipes/local.php';
-require 'recipes/tar.php';
+require 'recipes/rsync.php';
 require 'recipes/cleanup.php';
 
 # Extra task requirements
@@ -66,14 +66,11 @@ task('deploy', [
 
   // Build step
   'drupal7:env-settings', // Get the correct settings.local file
-  'drupal7:local-settings', // Get the correct settings.local file
   'drupal7:symlink', // Place the needed symlink
 
   // Sync step
-  'tar:archive',
-  'tar:sftp',
-  'tar:un-archive',
-  'tar:cleanup',
+  'rsync:lock',
+  'rsync:sync',
 
   // Deploy step
   'deploy:shared',
