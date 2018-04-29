@@ -74,10 +74,10 @@ task('deploy', [
 
   // Deploy step
   'deploy:shared',
-//  'drush7:cache-clear',
-//  'drush7:feature-revert-all',
-//  'drush7:updatedb',
-//  'drush7:cron',
+  'drush7:cache-clear',
+  'drush7:feature-revert-all',
+  'drush7:updatedb',
+  'drush7:cron',
   'deploy:symlink',
 
   // Clean up step
