@@ -12,8 +12,8 @@ set('rsync_options', [
     '--exclude=.git',
     '-q',
     // @TODO Fix this in a safer/cleaner way.
-    '-e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-    -r'
+    '-e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',
+    '-v',
   ],
 ]);
 
