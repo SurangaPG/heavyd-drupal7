@@ -1,0 +1,14 @@
+{
+  "name": "surangapg/heavyd-drupal7",
+  "description": "Simple deployer config and some extra backports to deploy a drupal 7 site.",
+  "authors": [
+    {
+      "name": "Suranga Panagamuwa Gamage",
+      "email": "suranga@webct.be"
+    }
+  ],
+  "require": {
+    "deployer/recipes": "^4.0",
+    "symfony/yaml": "^2.8 || ^3"
+  }
+}
