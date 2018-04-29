@@ -28,7 +28,7 @@ task('drush7:cache-clear', function () {
 desc('Drush feature revert all');
 task('drush7:feature-revert-all', function () {
   cd('{{release_path}}/web/sites/{{site}}');
-  run('{{drush_bin}} drush feature-revert-all -y');
+  run('{{drush_bin}} feature-revert-all -y');
 });
 
 // Import update all the entities
