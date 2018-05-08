@@ -41,7 +41,8 @@ set('local_workspace', $heavydProperties['project']['basePath']);
  * This is a more custom implementation to make the system more uniform.
  */
 foreach ($heavydProperties['server'] as $serverKey => $serverData) {
-  host($serverData['host'])
+  host($serverKey)
+    ->hostName($serverData['host'])
     ->stage( $serverData['stage'])
  //   ->configFile('~/.ssh/config')
     ->forwardAgent(true)
